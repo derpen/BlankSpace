@@ -1,0 +1,45 @@
+[gd_scene load_steps=8 format=3 uid="uid://db6lfumcvmgw4"]
+
+[ext_resource type="PackedScene" uid="uid://eun1ujiv3phy" path="res://game/player/Player.tscn" id="1_fbiu4"]
+[ext_resource type="PackedScene" uid="uid://b55ybw77u563" path="res://game/interactable/interactable.tscn" id="2_5vylu"]
+[ext_resource type="PackedScene" uid="uid://t5x38d5w0gmf" path="res://game/interactable/interactable_action.tscn" id="3_dkrx2"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_st7kv"]
+size = Vector2(5, 5)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_fbiu4"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_fbiu4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fbiu4"]
+
+[node name="Test" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_st7kv")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("WorldBoundaryShape3D_fbiu4")
+
+[node name="Player" parent="." instance=ExtResource("1_fbiu4")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.65110546, 0.7589873, 0, -0.7589873, 0.65110546, 0, 3.31248, 6.949773)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14297223, 0.73928976, -1.6486533)
+mesh = SubResource("BoxMesh_fbiu4")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D2"]
+
+[node name="Interactable" parent="MeshInstance3D2/StaticBody3D" node_paths=PackedStringArray("focus_target", "start_node") instance=ExtResource("2_5vylu")]
+focus_target = NodePath("..")
+start_node = NodePath("Inspect")
+
+[node name="Inspect" parent="MeshInstance3D2/StaticBody3D/Interactable" instance=ExtResource("3_dkrx2")]
+dialogues = Array[String](["Hmm..", "yes, yes..."])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D2/StaticBody3D"]
+shape = SubResource("BoxShape3D_fbiu4")
